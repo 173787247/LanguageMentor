@@ -6,6 +6,12 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+import sys
+from pathlib import Path
+
+# 添加项目根目录到路径
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 
 class BaseScenario(ABC):

@@ -3,8 +3,15 @@
 管理所有场景的创建和切换
 """
 from typing import Dict, Optional, Type
-from .config import get_config
-from .scenarios import (
+import sys
+from pathlib import Path
+
+# 添加项目根目录到路径
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from src.config import get_config
+from src.scenarios import (
     BaseScenario,
     SalaryNegotiationScenario,
     ApartmentRentalScenario,
