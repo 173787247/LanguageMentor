@@ -1,0 +1,18 @@
+{
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "api_key": "",
+    "base_url": null
+  },
+  "scenarios": {
+    "enabled": [
+      "salary_negotiation",
+      "apartment_rental",
+      "leave_request",
+      "airport_checkin"
+    ]
+  }
+}
+

@@ -8,6 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from typing import Dict, List, Optional
 import json
 import re
+from ..config import get_config
 
 
 class ConversationAgent:
@@ -16,15 +17,38 @@ class ConversationAgent:
     负责提供英语对话教学指导，包括教学点评、例句和角色回复
     """
     
-    def __init__(self, model_name: str = "gpt-4o-mini", temperature: float = 0.7):
+    def __init__(self, model_name: Optional[str] = None, temperature: Optional[float] = None,
+                 api_key: Optional[str] = None, base_url: Optional[str] = None):
         """
         初始化 Conversation Agent
         
         Args:
-            model_name: 模型名称
-            temperature: 温度参数
+            model_name: 模型名称（如果为 None，则从配置读取）
+            temperature: 温度参数（如果为 None，则从配置读取）
+            api_key: API Key（如果为 None，则从配置读取）
+            base_url: Base URL（如果为 None，则从配置读取）
         """
-        self.llm = ChatOpenAI(model=model_name, temperature=temperature)
+        # 从配置获取 LLM 设置
+        config = get_config()
+        llm_config = config.get_llm_config()
+        
+        model_name = model_name or llm_config.get("model", "gpt-4o-mini")
+        temperature = temperature if temperature is not None else llm_config.get("temperature", 0.7)
+        api_key = api_key or llm_config.get("api_key")
+        base_url = base_url or llm_config.get("base_url")
+        
+        # 初始化 LLM
+        llm_kwargs = {
+            "model": model_name,
+            "temperature": temperature
+        }
+        
+        if api_key:
+            llm_kwargs["api_key"] = api_key
+        if base_url:
+            llm_kwargs["base_url"] = base_url
+        
+        self.llm = ChatOpenAI(**llm_kwargs)
         self.model_name = model_name
         
         # 迭代优化后的系统提示词
